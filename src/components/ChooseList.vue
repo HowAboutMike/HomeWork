@@ -1,8 +1,12 @@
 <template>
-<select v-model="localcurrentUsersShown" >
-<option disabled value="">Выберите один из вариантов</option>
-  <option v-for="(option, index) in options" :key="index">{{option}}</option>
-</select>
+  <select v-model="currentUsersShown" >
+    <option 
+      disabled 
+      value="">Выберите один из вариантов</option>
+    <option 
+      v-for="(option, index) in options" 
+      :key="index">{{ option }}</option>
+  </select>
 </template>
 
 <script>
@@ -15,23 +19,19 @@ export default {
   props: {
     options: {
       type: Array,
-      required: true
+      default() {
+        return [5, 7, 10]
+      }
     },
     currentUsersShown: {
       type: Number,
-      default: 5
+      required: true
     }
   },
-  data: () => ({
-    localcurrentUsersShown: null
-  }),
   watch: {
-    localcurrentUsersShown() {
-      this.$emit('rowsChanged', parseInt(this.localcurrentUsersShown))
+    currentUsersShown() {
+      this.$emit('rowsChanged', parseInt(this.currentUsersShown))
     }
-  },
-  created() {
-    this.localcurrentUsersShown = this.currentUsersShown
   }
 }
 </script>

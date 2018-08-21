@@ -2,21 +2,35 @@
 
   <div>
     <h2>Редактирование пользователя</h2>
-    <div v-if="!user" class="alert alert-warning">
+    <div 
+      v-if="!user" 
+      class="alert alert-warning">
       Загрузка...
     </div>
-    <user-form v-else v-model="user"/>
+    <user-form 
+      v-else 
+      v-model="user"/>
 
-    <button class="btn btn-primary" @click="saveData"> Сохранить</button>
-    <button class="btn btn-danger" @click="deleteData">Удалить</button>
-    <button class="btn btn-primary" v-if="hasPrevUser" @click="prevUser">Предыдущий </button>
-    <button class="btn btn-danger" v-if="hasNextUser" @click="nextUser">Следующий</button>
+    <button 
+      class="btn btn-primary" 
+      @click="saveData"> Сохранить</button>
+    <button 
+      class="btn btn-danger" 
+      @click="deleteData">Удалить</button>
+    <button 
+      v-if="hasPrevUser" 
+      class="btn btn-primary" 
+      @click="prevUser">Предыдущий </button>
+    <button 
+      v-if="hasNextUser" 
+      class="btn btn-primary" 
+      @click="nextUser">Следующий</button>
   </div>
 
 </template>
 
 <script>
-import axios from 'axios'
+import axios from '@/axiosConfig.js'
 
 export default {
   name: 'EditUser',
@@ -31,7 +45,7 @@ export default {
   },
   computed: {
     id() {
-      return parseInt(this.$route.params.id)
+      return parseInt(this.$route.params.id, 10)
     },
     hasPrevUser() {
       return !(this.id === 0)
@@ -40,41 +54,37 @@ export default {
       return !(this.id === this.userCount)
     }
   },
+  watch: {
+    $route: 'loadData'
+  },
   mounted() {
     this.loadData()
     this.loadUsersCount()
   },
-  watch: {
-    $route() {
-      this.loadData()
-    }
-  },
   methods: {
     loadUsersCount() {
-      axios.get(`http://localhost:3000/users/`).then(response => {
+      axios.get(`/users/`).then(response => {
         this.userCount = response.data.length
       })
     },
     loadData() {
-      axios.get(`http://localhost:3000/users/${this.id}`).then(response => {
+      axios.get(`/users/${this.id}`).then(response => {
         this.user = response.data
       })
     },
     saveData() {
-      axios.patch(`http://localhost:3000/users/${this.id}`, this.user)
+      axios.patch(`/users/${this.id}`, this.user)
       this.goToList()
     },
     deleteData() {
-      axios.delete(`http://localhost:3000/users/${this.id}`)
+      axios.delete(`/users/${this.id}`)
       this.goToList()
     },
     nextUser() {
       this.$router.push(`${this.id + 1}`)
-      //  this.loadData()
     },
     prevUser() {
       this.$router.push(`${this.id - 1}`)
-      //this.loadData()
     },
     goToList() {
       this.$router.replace({ name: 'Users' })

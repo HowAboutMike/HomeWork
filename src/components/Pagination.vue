@@ -1,16 +1,34 @@
 <template>
   <div class="pagination">
-    <div class="prev"><a  href="#" v-if="!(this.currentPage == 1)" @click="changePage(prevPage)">&lt;&lt;</a></div>
+    <div class="prev">
+      <a 
+        v-if="!(currentPage == 1)" 
+        href="#"
+        @click="changePage(prevPage)">&lt;&lt;
+      </a>
+    </div>
     <div class="pageControl">
       <ul>
-        <li v-for="(page,index) in pages" @click="changePage(page)" :key="index">
-          <a hfer="#" :class="{currentPage: currentPage == page}">
-          {{page}}
+        <li 
+          v-for="page in pages" 
+          :key="page" 
+          @click="changePage(page)">
+          <a 
+            :class="{currentPage: currentPage == page}" 
+            hfer="#">
+            {{ page }}
           </a>
         </li>
       </ul>
     </div>
-    <div class="next"><a href="#" v-if="!(this.currentPage === this.totalPages)" @click="changePage(nextPage)">&gt;&gt;</a></div>
+    <div class="next">
+      <a 
+        v-if="!(currentPage === totalPages)" 
+        href="#" 
+        @click="changePage(nextPage)">
+        &gt;&gt;
+      </a>
+    </div>
 
   </div>
 </template>
@@ -26,7 +44,7 @@ export default {
   props: {
     currentPage: {
       type: Number,
-      default: 1
+      required: true
     },
     totalUsers: {
       type: Number,

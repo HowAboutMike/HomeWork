@@ -3,28 +3,44 @@
 
     <div class="form-group">
       <label>Имя</label>
-      <input type="text" class="form-control" v-model="localUser.firstName">
+      <input 
+        v-model="localUser.firstName" 
+        type="text" 
+        class="form-control">
     </div>
 
     <div class="form-group">
       <label>Фамилия</label>
-      <input type="text" class="form-control" v-model="localUser.lastName">
+      <input 
+        v-model="localUser.lastName" 
+        type="text" 
+        class="form-control">
     </div>
 
     <div class="form-group">
       <label>Возраст</label>
-      <input type="number" class="form-control" v-model="localUser.age">
+      <input 
+        v-model.number="localUser.age" 
+        type="number" 
+        class="form-control">
     </div>
 
     <div class="form-group">
       <label>Баланс</label>
-      <input type="text" class="form-control" v-model="localUser.balance">
+      <input 
+        v-model="localUser.balance" 
+        type="text" 
+        class="form-control">
     </div>
 
     <div class="form-group">
       <label>Роль</label>
-      <select v-model="localUser.accessLevel" class="form-control">
-        <option disabled value="">Выберите один из вариантов</option>
+      <select 
+        v-model="localUser.accessLevel" 
+        class="form-control">
+        <option 
+          disabled 
+          value="">Выберите один из вариантов</option>
         <option value="admin">Администратор</option>
         <option value="user">Пользователь</option>
       </select>
@@ -32,33 +48,72 @@
 
     <div class="form-group">
       <label>Email</label>
-      <input type="email" class="form-control" v-model="localUser.email">
+      <input 
+        v-model="localUser.email" 
+        type="email" 
+        class="form-control">
+    </div>
+    <div class="form-group">
+      <label>Avatar</label>
+      <br>
+      <img 
+        :src="localUser.picture" 
+        class="img-thumbnail">
+      <input 
+        v-model="localUser.picture" 
+        type="text" 
+        class="form-control">
+
+      <input 
+        ref="fileUploader" 
+        type="file" 
+        class="hidden"
+        @change="uploadFile">
+      <button 
+        type="button" 
+        class="btn btn-primary"
+        @click="selectNewImage">
+        Загрузить новый файл
+      </button>
     </div>
 
     <div class="form-group">
       <label>Телефон</label>
-      <input type="text" class="form-control" v-model="localUser.phone">
+      <input 
+        v-model="localUser.phone" 
+        type="text" 
+        class="form-control">
     </div>
 
     <div class="form-group">
-    <label>Адрес</label>
-      <input type="text" class="form-control" v-model="localUser.address">
+      <label>Адрес</label>
+      <input 
+        v-model="localUser.address" 
+        type="text" 
+        class="form-control">
     </div>
 
     <div class="form-group">
       <label>Компания</label>
-      <input type="text" class="form-control" v-model="localUser.company">
+      <input 
+        v-model="localUser.company" 
+        type="text" 
+        class="form-control">
     </div>
 
     <div class="form-group">
       <label>О вас</label>
-      <textarea class="form-control" v-model="localUser.about"/>
+      <textarea 
+        v-model="localUser.about" 
+        class="form-control"/>
     </div>
 
   </div>
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   name: 'UserForm',
   model: {
@@ -92,7 +147,33 @@ export default {
   methods: {
     updateLocalUser() {
       this.localUser = Object.assign({}, this.user)
+    },
+    selectNewImage() {
+      this.$refs.fileUploader.click()
+    },
+    uploadFile() {
+      const url = 'https://api.imgur.com/3/image'
+      const data = new FormData()
+      data.append('image', this.$refs.fileUploader.files[0])
+
+      const config = {
+        headers: {
+          Authorization: 'Client-ID af37c739d4ab817'
+        }
+      }
+      axios
+        .post(url, data, config)
+        .then(response => response.data)
+        .then(response => {
+          this.localUser.picture = response.data.link
+          this.$refs.fileUploader.value = ''
+        })
     }
   }
 }
 </script>
+<style>
+.hidden {
+  display: none;
+}
+</style>

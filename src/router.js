@@ -1,9 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from './views/Home.vue'
-import Users from './views/Users.vue'
-import EditUser from './views/EditUser.vue'
-import AddUser from './views/AddUser.vue'
 
 Vue.use(Router)
 
@@ -14,22 +10,27 @@ export default new Router({
     {
       path: '/',
       name: 'Home',
-      component: Home
+      component: () => import('./views/Home.vue')
     },
     {
       path: '/addUser',
       name: 'AddUser',
-      component: AddUser
+      component: () => import('./views/AddUser.vue')
     },
     {
       path: '/users',
       name: 'Users',
-      component: Users
+      component: () => import('./views/Users.vue')
+    },
+    {
+      path: '/phoneBook',
+      name: 'PhoneBook',
+      component: () => import('./views/PhoneBook.vue')
     },
     {
       path: '/editUser/:id',
       name: 'EditUser',
-      component: EditUser
+      component: () => import('./views/EditUser.vue')
     }
   ]
 })

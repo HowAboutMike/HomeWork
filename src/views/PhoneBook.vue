@@ -12,7 +12,23 @@
     </div>
     <user-list 
       v-else 
-      :users="users"/>
+      :users="users">
+      <tr slot="header">
+        <th>#</th>
+        <th>Имя</th>
+        <th>Фамилия</th>
+        <th>Телефон</th>
+      </tr>
+          
+      <template 
+        slot="row" 
+        slot-scope="props">
+        <td>{{ props.firstName }}</td>
+        <td>{{ props.lastName }}</td>
+        <td>{{ props.isActive }}</td>
+        <td>{{ props.phone }}</td> 
+      </template>
+    </user-list>
 
     <button 
       type="button" 
@@ -29,7 +45,7 @@
 import axios from '@/axiosConfig.js'
 
 export default {
-  name: 'Users',
+  name: 'PhoneBook',
   components: {
     UserList: () => import('@/components/UserList.vue')
   },
